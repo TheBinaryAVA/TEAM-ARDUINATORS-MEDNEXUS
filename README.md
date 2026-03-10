@@ -4,6 +4,7 @@
 **A real-time, AI-powered hospital dashboard that monitors KPIs, detects anomalies, predicts trends, manages queues, and sends proactive alerts. Designed for hackathons, demos, and industry-level presentations.**
 
 ---
+<img width="1536" height="1024" alt="ChatGPT Image Mar 10, 2026, 12_21_28 PM" src="https://github.com/user-attachments/assets/c9a504f5-dce9-4632-bf2e-daef3075a805" />
 
 ## 🎯 Key Features  
 

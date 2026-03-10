@@ -1,59 +1,86 @@
-🏥 MEDNEXUS
+🏥 MEDNEXUS – Next-Generation Hospital Operations Dashboard
 
-A next-generation hospital operations dashboard that monitors KPIs in real-time, detects anomalies, generates insights, predicts trends, and recommends corrective actions. Designed for hackathons, demos, and industry-level presentations.
+by Team Arduinators
+
+A real-time, AI-powered hospital dashboard that monitors KPIs, detects anomalies, predicts trends, manages queues, and recommends corrective actions. Designed for hackathons, demos, and industry-level presentations.
 
 🎯 Key Features
-Dashboard & Analytics
- 
-Role-Based Views: CEO, Department Head, Floor Supervisor
+📊 Dashboard & Analytics
 
-Glowing KPI Cards: Bed Occupancy, OPD Wait Time, Billing Collection, Lab TAT, Readmission Rate, Net Promoter Score
+Role-Based Views: CEO, Department Head, Floor Supervisor – customized insights.
 
-Trend Charts: Interactive Plotly/Recharts with anomaly markers and 7-day historical data
+Glowing KPI Cards: Bed Occupancy, OPD Wait Time, Billing Collection, Lab TAT, Readmission Rate, Net Promoter Score.
 
-Alert Panel: Real-time alerts with LOW / MEDIUM / HIGH severity
+Trend Charts: Interactive Plotly/Recharts charts with anomaly markers and 7-day history.
 
-AI Insights: Human-readable explanations with confidence scores
+Alert Panel: Real-time alerts – LOW / MEDIUM / HIGH severity.
 
-Predictive Alerts: Threshold forecasting for KPIs trending toward critical levels
+AI Insights: Human-readable explanations with confidence scores.
 
-n8n Integration
+Predictive Alerts: Forecast KPIs trending toward critical levels.
 
-Live KPI submission form connected to n8n webhook
+🤖 Smart Queue Management (YOLO-Powered)
 
-Validates inputs, shows loading state, parses JSON response, displays results
+Real-time queue detection in OPD, labs, and billing counters.
 
-Built-in error handling and retry support
+Updates wait time KPIs automatically.
 
-Profile & Settings
+Predictive alerts warn before queues reach critical levels.
 
-Edit Profile: Name, role, department, contact info
+AI-generated recommendations in English, Hindi, or Tamil.
 
-Theme Toggle: Light / Dark mode switch
+Demo Tip: Show live camera feed → dashboard updates → predictive alert triggers.
 
-Multi-Language Support: English, Hindi, Tamil
+🌐 Theme & Language Toggles
 
-User-Friendly Features
+Theme Modes: Light / Dark mode for comfortable viewing.
 
-Simple Login System: Hardcoded or role-based selection
+Language Modes: English 🇬🇧, Hindi 🇮🇳, Tamil 🟪.
 
-Fully responsive dashboard for desktop & mobile
+Fully dynamic—KPI cards, AI insights, and alerts update instantly.
 
-Smooth Framer Motion animations
+Accessibility: Designed for diverse hospital staff.
 
-3D-style KPI cards & modern glassmorphism UI
+⚡ n8n Workflow Integration
 
-Visual & UX Design
+Live KPI submission forms linked to n8n webhook.
 
-Dark medical theme with teal/cyan accents
+Validates input, shows loading states, parses JSON, and displays results.
 
-Polished glassmorphic cards, glowing KPI highlights
+Built-in error handling and retry support ensures reliability.
 
-Subtle heartbeat motif in header
+👤 Profile & Settings
 
-Clean typography and spacing for readability
+Edit profile: name, role, department, contact info.
 
-Responsive layout with mobile-first approach
+Theme toggle: Light/Dark mode.
 
+Multi-language support: English, Hindi, Tamil.
 
-<img width="1536" height="1024" alt="ChatGPT Image Mar 9, 2026, 02_43_09 PM" src="https://github.com/user-attachments/assets/5b5d8f4e-38af-4640-8251-102963915679" />
+🎨 Visual & UX Design
+
+Fully responsive for desktop & mobile.
+
+Smooth Framer Motion animations.
+
+3D-style glassmorphic KPI cards with glowing highlights.
+
+Dark medical theme with teal/cyan accents and subtle heartbeat motif.
+
+Clean typography & spacing for readability.
+
+🛠️ Tech Stack
+Component	Technology / Tool
+Frontend	React.js, Plotly/Recharts, Framer Motion
+Backend / Automation	Node.js, n8n workflow
+AI / Analytics	Python / JS predictive models, YOLOv8 for queue management
+Styling	Tailwind CSS, Glassmorphism design
+🚀 Why MEDNEXUS Stands Out
+
+Real-time, AI-powered insights for hospital operations.
+
+Predictive alerts & queue management prevent bottlenecks.
+
+Multi-language & multi-theme support enhances accessibility.
+
+Hackathon-ready: visually impressive, technically deep, and scalable.

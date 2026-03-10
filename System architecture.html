@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDNEXUS – System Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070d1a;
+    --panel: #0d1626;
+    --border: rgba(255,255,255,0.07);
+    --blue: #2d8cf0;
+    --blue-light: #5ba8ff;
+    --green: #22c97d;
+    --yellow: #f5c842;
+    --gray: #7e8fa8;
+    --purple: #9d6ff7;
+    --red: #ff5b5b;
+    --text: #e2ecff;
+    --muted: #4a607a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    font-family: 'Syne', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(600px circle at 10% 80%, rgba(45,140,240,0.04) 0%, transparent 70%),
+      radial-gradient(400px circle at 90% 20%, rgba(34,201,125,0.04) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  .wrapper { position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:40px 28px 60px; }
+
+  /* Header */
+  .header { text-align:center; margin-bottom:44px; }
+  .badge {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--blue-light);
+    letter-spacing:.18em; text-transform:uppercase;
+    border:1px solid rgba(45,140,240,.3); padding:5px 14px; border-radius:100px;
+    margin-bottom:16px; background:rgba(45,140,240,.05);
+  }
+  .badge-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); box-shadow:0 0 8px var(--blue); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  h1 {
+    font-size:clamp(28px,4vw,46px); font-weight:800; letter-spacing:-.02em;
+    background:linear-gradient(135deg,#fff 0%,var(--blue-light) 55%,var(--green) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:8px;
+  }
+  .subtitle { font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); letter-spacing:.06em; }
+
+  /* Legend */
+  .legend { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-bottom:40px; }
+  .li { display:flex; align-items:center; gap:7px; font-size:11px; font-family:'IBM Plex Mono',monospace; color:var(--muted); }
+  .ld { width:10px; height:10px; border-radius:2px; }
+
+  /* Section label */
+  .slabel {
+    display:flex; align-items:center; gap:10px; margin-bottom:12px; opacity:.35;
+  }
+  .slabel-line { flex:1; height:1px; background:var(--muted); }
+  .slabel-text { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+
+  /* Grid rows */
+  .row { display:grid; gap:18px; }
+  .r3 { grid-template-columns:repeat(3,1fr); }
+  .r2 { grid-template-columns:repeat(2,1fr); }
+  .r1 { grid-template-columns:1fr; }
+
+  /* Cards */
+  .card {
+    border-radius:14px; padding:20px; border:1px solid var(--border);
+    position:relative; overflow:hidden; transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform:translateY(-2px); }
+  .card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ac,var(--blue)),transparent); opacity:.6;
+  }
+  .cb { --ac:var(--blue); background:linear-gradient(135deg,#0e1e35,#0d1626); }
+  .cb:hover { box-shadow:0 8px 40px rgba(45,140,240,.18); }
+  .cg { --ac:var(--green); background:linear-gradient(135deg,#0b1f18,#0d1a16); }
+  .cg:hover { box-shadow:0 8px 40px rgba(34,201,125,.18); }
+  .cy { --ac:var(--yellow); background:linear-gradient(135deg,#1e1a0a,#1a1608); }
+  .cy:hover { box-shadow:0 8px 40px rgba(245,200,66,.18); }
+  .cgr { --ac:var(--gray); background:linear-gradient(135deg,#111923,#0f1720); }
+  .cgr:hover { box-shadow:0 8px 40px rgba(126,143,168,.12); }
+  .cp { --ac:var(--purple); background:linear-gradient(135deg,#130f1e,#100d1b); }
+  .cp:hover { box-shadow:0 8px 40px rgba(157,111,247,.18); }
+
+  .icon {
+    width:42px; height:42px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+    margin-bottom:12px;
+  }
+  .ib { background:rgba(45,140,240,.15); border:1px solid rgba(45,140,240,.25); }
+  .ig { background:rgba(34,201,125,.15); border:1px solid rgba(34,201,125,.25); }
+  .iy { background:rgba(245,200,66,.15); border:1px solid rgba(245,200,66,.25); }
+  .igr { background:rgba(126,143,168,.15); border:1px solid rgba(126,143,168,.25); }
+  .ip { background:rgba(157,111,247,.15); border:1px solid rgba(157,111,247,.25); }
+
+  .clabel { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px; opacity:.55; }
+  .lb { color:var(--blue-light); } .lg { color:var(--green); } .ly { color:var(--yellow); } .lgr { color:var(--gray); } .lp { color:var(--purple); }
+  .ctitle { font-size:15px; font-weight:700; letter-spacing:-.01em; margin-bottom:9px; line-height:1.2; }
+  .cdesc { font-size:11px; color:#7e8fa8; font-family:'IBM Plex Mono',monospace; line-height:1.65; margin-bottom:10px; }
+
+  .tags { display:flex; flex-wrap:wrap; gap:5px; }
+  .tag { font-family:'IBM Plex Mono',monospace; font-size:9px; padding:3px 8px; border-radius:4px; line-height:1.4; }
+  .tb { background:rgba(45,140,240,.12); color:var(--blue-light); border:1px solid rgba(45,140,240,.2); }
+  .tg { background:rgba(34,201,125,.1); color:var(--green); border:1px solid rgba(34,201,125,.2); }
+  .ty { background:rgba(245,200,66,.1); color:var(--yellow); border:1px solid rgba(245,200,66,.2); }
+  .tgr { background:rgba(126,143,168,.1); color:var(--gray); border:1px solid rgba(126,143,168,.2); }
+  .tp { background:rgba(157,111,247,.1); color:var(--purple); border:1px solid rgba(157,111,247,.2); }
+  .tr { background:rgba(255,91,91,.1); color:var(--red); border:1px solid rgba(255,91,91,.2); }
+
+  /* Flow connectors */
+  .flow { height:38px; display:flex; align-items:center; justify-content:center; gap:60px; position:relative; }
+  .flow::before {
+    content:''; position:absolute; left:15%; right:15%; height:1px; top:50%;
+    background:linear-gradient(to right,transparent,rgba(100,150,220,.2),transparent);
+  }
+  .farrow { display:flex; flex-direction:column; align-items:center; gap:2px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:.05em; z-index:1; }
+
+  /* Role cards */
+  .roles { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .rcard {
+    border-radius:12px; padding:15px 16px; border:1px solid var(--border);
+    background:var(--panel); display:flex; align-items:center; gap:12px;
+    transition:transform .2s;
+  }
+  .rcard:hover { transform:translateY(-2px); }
+  .ravatar { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+  .rname { font-size:13px; font-weight:700; margin-bottom:3px; }
+  .rdesc { font-size:10px; font-family:'IBM Plex Mono',monospace; color:var(--muted); line-height:1.45; }
+
+  /* Hub card */
+  .hub { text-align:center; }
+  .hub .icon { width:54px; height:54px; border-radius:14px; font-size:27px; margin:0 auto 14px; }
+  .hub .ctitle { font-size:18px; }
+  .hub .tags { justify-content:center; }
+
+  /* SVG data flow chart */
+  .flowbox { border:1px solid var(--border); border-radius:14px; background:var(--panel); padding:24px 20px; margin-top:36px; }
+  .flowbox-title { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; opacity:.5; }
+
+  .footnote { text-align:center; margin-top:28px; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:.08em; opacity:.5; }
+
+  @media (max-width:700px) { .r3,.r2,.roles { grid-template-columns:1fr; } }
+  @media (max-width:920px) { .r3 { grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="badge"><div class="badge-dot"></div>System Architecture · v1.0</div>
+    <h1>MEDNEXUS</h1>
+    <p class="subtitle">Hospital Operations Intelligence Platform &nbsp;·&nbsp; Component Map &amp; Data Flow</p>
+  </div>
+
+  <div class="legend">
+    <div class="li"><div class="ld" style="background:#2d8cf0"></div>Frontend / Dashboard</div>
+    <div class="li"><div class="ld" style="background:#22c97d"></div>AI &amp; Predictive Engine</div>
+    <div class="li"><div class="ld" style="background:#9d6ff7"></div>Smart Queue (YOLO CV)</div>
+    <div class="li"><div class="ld" style="background:#f5c842"></div>Alerts &amp; Notifications</div>
+    <div class="li"><div class="ld" style="background:#7e8fa8"></div>n8n Workflow Automation</div>
+    <div class="li"><div class="ld" style="background:#e2ecff"></div>User Roles</div>
+  </div>
+
+  <!-- ── USER ROLES ── -->
+  <div class="slabel"><div class="slabel-line"></div><div class="slabel-text">User Access Layer</div><div class="slabel-line"></div></div>
+  <div class="roles" style="margin-bottom:0">
+    <div class="rcard" style="border-color:rgba(45,140,240,.2)">
+      <div class="ravatar" style="background:rgba(45,140,240,.12);border:1px solid rgba(45,140,240,.25)">👔</div>
+      <div>
+        <div class="rname">CEO</div>
+        <div class="rdesc">Executive KPIs · Org-wide insights<br>Strategic predictive alerts</div>
+      </div>
+    </div>
+    <div class="rcard" style="border-color:rgba(34,201,125,.2)">
+      <div class="ravatar" style="background:rgba(34,201,125,.12);border:1px solid rgba(34,201,125,.25)">🏥</div>
+      <div>
+        <div class="rname">Department Head</div>
+        <div class="rdesc">Dept metrics · Staff performance<br>Capacity &amp; trend analysis</div>
+      </div>
+    </div>
+    <div class="rcard" style="border-color:rgba(157,111,247,.2)">
+      <div class="ravatar" style="background:rgba(157,111,247,.12);border:1px solid rgba(157,111,247,.25)">🦺</div>
+      <div>
+        <div class="rname">Floor Supervisor</div>
+        <div class="rdesc">Live queue status · Wait times<br>Real-time floor operations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- arrow -->
+  <div class="flow" style="height:36px">
+    <div class="farrow">
+      <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0v14M2 9l5 6 5-6" stroke="#2d8cf0" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Role-based views
+    </div>
+  </div>
+
+  <!-- ── WEB DASHBOARD ── -->
+  <div class="slabel"><div class="slabel-line"></div><div class="slabel-text">Frontend Layer</div><div class="slabel-line"></div></div>
+  <div class="card cb hub" style="margin-bottom:0">
+    <div class="icon ib hub">📊</div>
+    <div class="clabel lb">Frontend · Web Dashboard</div>
+    <div class="ctitle">Web Intelligence Dashboard</div>
+    <p class="cdesc" style="max-width:600px;margin:0 auto 12px">Real-time hospital operations command center — displays KPIs, trend charts, AI-generated insights with confidence scores, predictive alerts, and multi-language support. Adapts views per user role.</p>
+    <div class="tags">
+      <span class="tag tb">KPI Panels</span>
+      <span class="tag tb">Trend Charts</span>
+      <span class="tag tb">AI Insights</span>
+      <span class="tag tb">Predictive Alerts</span>
+      <span class="tag tb">Multi-language</span>
+      <span class="tag tb">Role-based Views</span>
+      <span class="tag tb">Live Queue Status</span>
+      <span class="tag tb">Confidence Scores</span>
+    </div>
+  </div>
+
+  <!-- arrows down to processing layer -->
+  <div class="flow">
+    <div class="farrow">
+      <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0v14M2 9l5 6 5-6" stroke="#22c97d" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      AI insights
+    </div>
+    <div class="farrow">
+      <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0v14M2 9l5 6 5-6" stroke="#7e8fa8" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      KPI updates
+    </div>
+    <div class="farrow">
+      <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0v14M2 9l5 6 5-6" stroke="#9d6ff7" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Queue feed
+    </div>
+  </div>
+
+  <!-- ── PROCESSING LAYER ── -->
+  <div class="slabel"><div class="slabel-line"></div><div class="slabel-text">Processing Layer</div><div class="slabel-line"></div></div>
+  <div class="row r3" style="margin-bottom:0">
+
+    <div class="card cg">
+      <div class="icon ig">🧠</div>
+      <div class="clabel lg">Core Engine · AI</div>
+      <div class="ctitle">AI &amp; Predictive Engine</div>
+      <p class="cdesc">Ingests KPI streams, runs predictive models, assigns confidence scores, and dispatches AI insights and predictive alerts upstream.</p>
+      <div class="tags">
+        <span class="tag tg">KPI Processing</span>
+        <span class="tag tg">Predictive Alerts</span>
+        <span class="tag tg">Confidence Scores</span>
+        <span class="tag tg">Trend Detection</span>
+        <span class="tag tg">AI Insights</span>
+      </div>
+    </div>
+
+    <div class="card cgr">
+      <div class="icon igr">⚙️</div>
+      <div class="clabel lgr">Automation · n8n</div>
+      <div class="ctitle">n8n Workflow Automation</div>
+      <p class="cdesc">Central orchestrator: receives live KPI submissions, validates &amp; parses data, routes to AI engine, triggers alert events, and pushes dashboard updates.</p>
+      <div class="tags">
+        <span class="tag tgr">Live KPI Ingest</span>
+        <span class="tag tgr">Validation</span>
+        <span class="tag tgr">Data Parsing</span>
+        <span class="tag tgr">Alert Triggers</span>
+        <span class="tag tgr">Dashboard Push</span>
+      </div>
+    </div>
+
+    <div class="card cp">
+      <div class="icon ip">📷</div>
+      <div class="clabel lp">Vision · YOLO CV</div>
+      <div class="ctitle">Smart Queue Management</div>
+      <p class="cdesc">YOLOv8-powered CCTV analysis detects patient queues in real time, counts headcount, calculates wait time estimates, and feeds data to the dashboard.</p>
+      <div class="tags">
+        <span class="tag tp">YOLOv8 Detection</span>
+        <span class="tag tp">Queue Counting</span>
+        <span class="tag tp">Wait Time Calc</span>
+        <span class="tag tp">CCTV Streams</span>
+        <span class="tag tp">Live Feed</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- arrows down to notification layer -->
+  <div class="flow">
+    <div class="farrow">
+      <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0v14M2 9l5 6 5-6" stroke="#f5c842" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Triggered alerts
+    </div>
+    <div class="farrow">
+      <svg width="14" height="18" viewBox="0 0 14 18"><path d="M7 0v14M2 9l5 6 5-6" stroke="#f5c842" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Notification events
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATION + DATA SOURCES ── -->
+  <div class="slabel"><div class="slabel-line"></div><div class="slabel-text">Notification &amp; Ingestion Layer</div><div class="slabel-line"></div></div>
+  <div class="row r2" style="margin-bottom:0">
+
+    <div class="card cy">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div class="icon iy" style="flex-shrink:0">🔔</div>
+        <div>
+          <div class="clabel ly">Notifications · Alerts</div>
+          <div class="ctitle">Alerts &amp; Notifications Hub</div>
+          <p class="cdesc">Real-time multi-channel alert dispatch triggered by the AI engine or n8n automation. Delivers role-targeted messages at critical threshold crossings.</p>
+          <div class="tags">
+            <span class="tag ty">📧 Email Alerts</span>
+            <span class="tag ty">✈️ Telegram Bot</span>
+            <span class="tag ty">AI-triggered</span>
+            <span class="tag ty">n8n-triggered</span>
+            <span class="tag tr">Critical Thresholds</span>
+            <span class="tag ty">Role-targeted</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card cgr">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div class="icon igr" style="flex-shrink:0">🗄️</div>
+        <div>
+          <div class="clabel lgr">Ingestion · Data Sources</div>
+          <div class="ctitle">Data Inputs &amp; Integrations</div>
+          <p class="cdesc">Hospital information sources feeding the entire platform. Supports HIS/EHR exports, manual KPI submissions, CCTV streams, and external REST APIs.</p>
+          <div class="tags">
+            <span class="tag tgr">HIS / EHR</span>
+            <span class="tag tgr">Manual KPI Entry</span>
+            <span class="tag tgr">CCTV Streams</span>
+            <span class="tag tgr">REST API</span>
+            <span class="tag tgr">Webhook Events</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FLOW DIAGRAM ── -->
+  <div class="flowbox">
+    <div class="flowbox-title">Bidirectional Data Flow Overview</div>
+    <svg viewBox="0 0 1060 190" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+      <defs>
+        <marker id="mh" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4a607a"/></marker>
+        <marker id="mg" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#22c97d"/></marker>
+        <marker id="my" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#f5c842"/></marker>
+        <marker id="mp" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#9d6ff7"/></marker>
+        <marker id="mb" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2d8cf0"/></marker>
+      </defs>
+
+      <!-- Data Sources -->
+      <rect x="18" y="68" width="128" height="50" rx="8" fill="#141e2e" stroke="#7e8fa8" stroke-width="1"/>
+      <text x="82" y="89" text-anchor="middle" fill="#7e8fa8" font-family="IBM Plex Mono,monospace" font-size="10">🗄️ Data Sources</text>
+      <text x="82" y="105" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="8">HIS · CCTV · API</text>
+
+      <!-- n8n -->
+      <rect x="196" y="68" width="140" height="50" rx="8" fill="#111923" stroke="#7e8fa8" stroke-width="1"/>
+      <text x="266" y="89" text-anchor="middle" fill="#7e8fa8" font-family="IBM Plex Mono,monospace" font-size="10">⚙️ n8n Automation</text>
+      <text x="266" y="105" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="8">Validate · Route · Push</text>
+
+      <!-- AI Engine -->
+      <rect x="388" y="68" width="148" height="50" rx="8" fill="#0b1f18" stroke="#22c97d" stroke-width="1"/>
+      <text x="462" y="89" text-anchor="middle" fill="#22c97d" font-family="IBM Plex Mono,monospace" font-size="10">🧠 AI Engine</text>
+      <text x="462" y="105" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="8">Predict · Score · Detect</text>
+
+      <!-- YOLO CV -->
+      <rect x="590" y="12" width="138" height="46" rx="8" fill="#130f1e" stroke="#9d6ff7" stroke-width="1"/>
+      <text x="659" y="31" text-anchor="middle" fill="#9d6ff7" font-family="IBM Plex Mono,monospace" font-size="10">📷 YOLO CV</text>
+      <text x="659" y="47" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="8">Queue · Wait Times</text>
+
+      <!-- Alerts -->
+      <rect x="590" y="128" width="138" height="46" rx="8" fill="#1e1a0a" stroke="#f5c842" stroke-width="1"/>
+      <text x="659" y="148" text-anchor="middle" fill="#f5c842" font-family="IBM Plex Mono,monospace" font-size="10">🔔 Alerts Hub</text>
+      <text x="659" y="163" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="8">Email · Telegram</text>
+
+      <!-- Dashboard -->
+      <rect x="788" y="68" width="158" height="50" rx="8" fill="#0e1e35" stroke="#2d8cf0" stroke-width="1.5"/>
+      <text x="867" y="89" text-anchor="middle" fill="#5ba8ff" font-family="IBM Plex Mono,monospace" font-size="10">📊 Dashboard</text>
+      <text x="867" y="105" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="8">KPI · Charts · Insights</text>
+
+      <!-- Users -->
+      <rect x="1004" y="68" width="48" height="50" rx="8" fill="#0d1626" stroke="#2d8cf0" stroke-width="0.5" stroke-dasharray="3,2"/>
+      <text x="1028" y="89" text-anchor="middle" fill="#5ba8ff" font-family="IBM Plex Mono,monospace" font-size="11">👤</text>
+      <text x="1028" y="107" text-anchor="middle" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="7">Users</text>
+
+      <!-- Arrows -->
+      <line x1="146" y1="93" x2="194" y2="93" stroke="#7e8fa8" stroke-width="1.5" marker-end="url(#mh)"/>
+      <line x1="336" y1="93" x2="386" y2="93" stroke="#7e8fa8" stroke-width="1.5" marker-end="url(#mh)"/>
+      <!-- AI → Dashboard -->
+      <line x1="536" y1="93" x2="786" y2="93" stroke="#22c97d" stroke-width="1.5" marker-end="url(#mg)"/>
+      <!-- AI → YOLO (dashed) -->
+      <path d="M536,80 Q560,35 588,35" fill="none" stroke="#4a607a" stroke-width="1" stroke-dasharray="4,2"/>
+      <!-- AI → Alerts -->
+      <path d="M536,106 Q560,151 588,151" fill="none" stroke="#f5c842" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#my)"/>
+      <!-- YOLO → Dashboard -->
+      <path d="M728,35 Q760,35 867,66" fill="none" stroke="#9d6ff7" stroke-width="1.5" marker-end="url(#mp)"/>
+      <!-- Alerts → Dashboard -->
+      <path d="M728,151 Q760,151 867,120" fill="none" stroke="#f5c842" stroke-width="1.5" marker-end="url(#my)"/>
+      <!-- n8n → Alerts (curved down) -->
+      <path d="M266,118 Q266,151 588,151" fill="none" stroke="#f5c842" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#my)"/>
+      <!-- Dashboard → Users -->
+      <line x1="946" y1="93" x2="1002" y2="93" stroke="#2d8cf0" stroke-width="1.5" marker-end="url(#mb)"/>
+
+      <!-- Labels -->
+      <text x="162" y="86" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="7">KPI data</text>
+      <text x="346" y="86" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="7">validated</text>
+      <text x="625" y="86" fill="#22c97d" font-family="IBM Plex Mono,monospace" font-size="7">insights</text>
+      <text x="740" y="28" fill="#9d6ff7" font-family="IBM Plex Mono,monospace" font-size="7">queue feed</text>
+      <text x="740" y="164" fill="#f5c842" font-family="IBM Plex Mono,monospace" font-size="7">real-time</text>
+      <text x="960" y="86" fill="#4a607a" font-family="IBM Plex Mono,monospace" font-size="7">views</text>
+    </svg>
+  </div>
+
+  <p class="footnote">MEDNEXUS · Hospital Operations Platform · Architecture v1.0 · All data flows are encrypted in transit</p>
+
+</div>
+</body>
+</html>

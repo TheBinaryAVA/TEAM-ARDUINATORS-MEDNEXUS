@@ -73,6 +73,11 @@
 - Hackathon-ready: visually impressive, technically deep, and scalable.  
 
 ---
+DEMO OF QUEUE MANAGEMENT SYSTEM:
+Input System:
+![demo_input-ezgif com-split](https://github.com/user-attachments/assets/7adee12d-f135-4136-9282-146ae564163b)
+Output System:
+<img width="900" height="600" alt="queue_output_frame" src="https://github.com/user-attachments/assets/f700e220-2b0d-4f67-98a3-0927dc371d1f" />
 
 
 ### 👥 Team

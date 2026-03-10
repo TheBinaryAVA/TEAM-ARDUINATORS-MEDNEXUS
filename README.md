@@ -1,3 +1,5 @@
+**MEDNEXUS**
+
 A next-generation,hospital operations dashboard that monitors KPIs in real-time, detects anomalies, generates insights, predicts trends, and recommends corrective actions. Designed for hackathons, demos, and industry-level presentations.
 
 🎯 Key Features

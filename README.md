@@ -4,7 +4,7 @@ A next-generation hospital operations dashboard that monitors KPIs in real-time,
 
 🎯 Key Features
 Dashboard & Analytics
-
+ 
 Role-Based Views: CEO, Department Head, Floor Supervisor
 
 Glowing KPI Cards: Bed Occupancy, OPD Wait Time, Billing Collection, Lab TAT, Readmission Rate, Net Promoter Score

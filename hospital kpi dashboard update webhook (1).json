@@ -1,0 +1,477 @@
+{
+  "name": "hospital kpi dashboard update webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ikogvXfeZpLcDsLfUb3E61BspsY682Taj2vQT2TKY88",
+          "mode": "list",
+          "cachedResultName": "hospital KPI dashboard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ikogvXfeZpLcDsLfUb3E61BspsY682Taj2vQT2TKY88/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1757487050,
+          "mode": "list",
+          "cachedResultName": "today_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ikogvXfeZpLcDsLfUb3E61BspsY682Taj2vQT2TKY88/edit#gid=1757487050"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.date }}",
+            "Department": "={{ $json.department }}",
+            "Bed_Occupancy_%": "={{ $json.bed_occupancy }}",
+            "Avg_Wait_Time_Min": "={{ $json.wait_time }}",
+            "Billing_Collection_%": "={{ $json.billing_collection }}",
+            "Lab_TAT_Min": "={{ $json.lab_tat }}",
+            "NPS": "={{ $json.nps }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Department",
+              "displayName": "Department",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Bed_Occupancy_%",
+              "displayName": "Bed_Occupancy_%",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Avg_Wait_Time_Min",
+              "displayName": "Avg_Wait_Time_Min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Billing_Collection_%",
+              "displayName": "Billing_Collection_%",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lab_TAT_Min",
+              "displayName": "Lab_TAT_Min",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "NPS",
+              "displayName": "NPS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -800,
+        128
+      ],
+      "id": "fb1e9bf3-d751-4e33-be74-3e65bf5771f6",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YRCTOmsHzdS7Clg7",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ikogvXfeZpLcDsLfUb3E61BspsY682Taj2vQT2TKY88",
+          "mode": "list",
+          "cachedResultName": "hospital KPI dashboard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ikogvXfeZpLcDsLfUb3E61BspsY682Taj2vQT2TKY88/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "historical_kpi Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ikogvXfeZpLcDsLfUb3E61BspsY682Taj2vQT2TKY88/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -528,
+        -96
+      ],
+      "id": "e011b229-153b-47cf-9f94-4fe03fc4f678",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YRCTOmsHzdS7Clg7",
+          "name": "Google Sheets account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Hospital KPI Analytics Agent.\n\nYour task is to detect anomalies in today's KPI data compared to the historical dataset.\n\nTODAY KPI DATA:\ndepartment:{{ $('Webhook').item.json.body.department }}\nbed occupancy:{{ $('Webhook').item.json.body.bed_occupancy }}\navg_wait_time:{{ $('Webhook').item.json.body.opd_wait_time }}\nbilling _collection:{{ $('Webhook').item.json.body.billing_collection }}\nlab_TAT_min:{{ $('Webhook').item.json.body.lab_tat }}\nNPS:{{ $('Webhook').item.json.body.nps }}\n\nHISTORICAL DATASET:\n{{ JSON.stringify($items().map(i => i.json)) }}\n\nKPIs to analyze:\n- Bed_Occupancy_%\n- Avg_Wait_Time_Min\n- Billing_Collection_%\n- Lab_TAT_Min\n- NPS\n\nSteps:\n1. Extract today's department from TODAY KPI DATA.\n2. Filter HISTORICAL DATASET to keep only rows with the same Department.\n3. Use up to the last 7 rows for that department.\n4. Compute the average baseline for each KPI.\n5. Calculate deviation:\n\nDeviation % = ((Today - Baseline) / Baseline) * 100\n\n6. If deviation magnitude > 15%, mark as anomaly.\n\nReturn ONLY JSON.\n\nIf anomaly detected:\n\n{\n \"department\": \"\",\n \"kpi\": \"\",\n \"today_value\": \"\",\n \"baseline_value\": \"\",\n \"deviation_percent\": \"\",\n \"anomaly_detected\": true,\n \"insight\": \"\",\n \"recommended_action\": \"\",\n \"priority\": \"High | Medium | Low\"\n}\n\nIf no anomaly detected:\n\n{\n \"message\": \"No KPI anomalies detected today\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        352,
+        112
+      ],
+      "id": "b7163f34-79a2-461c-8597-f563f657741d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3a01089b-3ebb-4a1a-a515-167f8b124e8f",
+              "leftValue": "={{$json.Date}}",
+              "rightValue": "={{ $('Append row in sheet').item.json.Date }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        112
+      ],
+      "id": "9d4f5516-d27f-4ae2-a035-17f65b884097",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "Department"
+            },
+            {
+              "fieldToAggregate": "Bed_Occupancy_%"
+            },
+            {
+              "fieldToAggregate": "Avg_Wait_Time_Min"
+            },
+            {
+              "fieldToAggregate": "Billing_Collection_%"
+            },
+            {
+              "fieldToAggregate": "Lab_TAT_Min"
+            },
+            {
+              "fieldToAggregate": "NPS"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        32,
+        -112
+      ],
+      "id": "00683c6f-7336-4487-8899-f278c866b0f4",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"department\": {\n      \"type\": \"string\"\n    },\n    \"kpi\": {\n      \"type\": \"string\"\n    },\n    \"today_value\": {\n      \"type\": \"number\"\n    },\n    \"baseline_value\": {\n      \"type\": \"number\"\n    },\n    \"deviation_percent\": {\n      \"type\": \"string\",\n      \"description\": \"The percentage deviation expressed as a string with a percent sign, e.g., '936.81%'\"\n    },\n    \"anomaly_detected\": {\n      \"type\": \"boolean\"\n    },\n    \"insight\": {\n      \"type\": \"string\"\n    },\n    \"recommended_action\": {\n      \"type\": \"string\"\n    },\n    \"priority\": {\n      \"type\": \"string\",\n      \"enum\": [\"High\", \"Medium\", \"Low\"]\n    }\n  },\n  \"required\": [\n    \"department\", \n    \"kpi\", \n    \"today_value\", \n    \"deviation_percent\", \n    \"anomaly_detected\", \n    \"insight\", \n    \"recommended_action\"\n  ]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        336
+      ],
+      "id": "1c3147a8-4b8e-427e-a0ee-4e42dd3da65b",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "sendTo": "nsaishrinivas@gmail.com",
+        "subject": "your daily hospital KPI report",
+        "emailType": "text",
+        "message": "=My respected user,\n\nThe entered KPI values has made to some insights and anomalies,\nhere they are given below.\n\n\nFor the department {{ $json.output.department }},\nwe have anomally in {{ $json.output.kpi }} having a value {{ $json.output.today_value }}  . with a deviation percent of {{ $json.output.deviation_percent }} .\nanomaly detected = {{ $json.output.anomaly_detected }}. \n\n\nInsights:\n\n{{ $json.output.insight }}\n\n\nRecommended actions:\n\n{{ $json.output.recommended_action }}\n\nThe priority is :{{ $json.output.priority }}\n\n\n\n\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        -80
+      ],
+      "id": "bfff4f3f-f6d3-4b85-8ebc-434bd489d20a",
+      "name": "Send a message",
+      "webhookId": "7c9f0a72-f859-40ac-92a8-53d7c3b5a7db",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "c6sbq6KhqWA64FSB",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hospital-kpi-dashboard-updated",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1056,
+        -96
+      ],
+      "id": "949b8f1d-24cb-4ae4-8a2e-dbc6c2341f3a",
+      "name": "Webhook",
+      "webhookId": "c9837be2-6145-4d12-8d70-32642f36edff"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"INSIGHTS\" : \"{{ $('AI Agent').item.json.output.insight }}\",\n\n\"RECOMENDATIONS\" : \"{{ $('AI Agent').item.json.output.recommended_action }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1232,
+        112
+      ],
+      "id": "9ed9d1d5-850f-4d2f-afe0-3b26dc052391",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        192,
+        368
+      ],
+      "id": "3fa2af86-5865-4fb2-8d73-ebd5604f211d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pkZcYJLu94ZUqVXZ",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "8593406378",
+        "text": "=The data entered has values:\n\ndepartment : {{ $('AI Agent').item.json.output.department }}\nAnomaly Attribute : {{ $('AI Agent').item.json.output.kpi }}\nAnomaly value : {{ $('AI Agent').item.json.output.today_value }}\ndeviation : {{ $('AI Agent').item.json.output.deviation_percent }}\n\nINSIGHTS TAKEN : {{ $('AI Agent').item.json.output.insight }}\n\n\nRECOMMENDED ACTIONS: {{ $('AI Agent').item.json.output.recommended_action }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1552,
+        -80
+      ],
+      "id": "e82ea93f-09d5-4682-9d80-c93281c8d47a",
+      "name": "Send a text message",
+      "webhookId": "cf553b96-997e-4513-96ab-cf9c332ecf30",
+      "credentials": {
+        "telegramApi": {
+          "id": "77fuf6i3EM5xVygd",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c5b68622-6e4b-46fa-8282-1e4d4ceec26a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2a3b648667700f808165eb68ac04a930da78317297b556b7de02a60288adb4be"
+  },
+  "id": "WZ8W3D4urRixj4s6",
+  "tags": []
+}

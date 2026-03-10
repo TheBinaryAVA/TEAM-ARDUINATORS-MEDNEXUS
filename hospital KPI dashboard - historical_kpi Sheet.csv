@@ -1,0 +1,36 @@
+Date,Department,Bed_Occupancy_%,Avg_Wait_Time_Min,Billing_Collection_%,Lab_TAT_Min,NPS
+2026-03-01,Cardiology,82,25,96,52,78
+2026-03-01,Neurology,76,22,94,58,74
+2026-03-01,Orthopedics,71,18,93,49,80
+2026-03-01,Pediatrics,69,20,95,47,82
+2026-03-01,General Medicine,74,24,92,51,76
+2026-03-02,Cardiology,83,26,96,53,77
+2026-03-02,Neurology,77,23,95,57,75
+2026-03-02,Orthopedics,72,19,94,50,79
+2026-03-02,Pediatrics,70,21,95,48,81
+2026-03-02,General Medicine,73,24,93,52,76
+2026-03-03,Cardiology,84,27,96,54,78
+2026-03-03,Neurology,78,22,95,58,74
+2026-03-03,Orthopedics,73,20,94,50,80
+2026-03-03,Pediatrics,70,20,96,48,82
+2026-03-03,General Medicine,74,25,92,52,75
+2026-03-04,Cardiology,82,25,97,52,79
+2026-03-04,Neurology,77,23,94,57,75
+2026-03-04,Orthopedics,72,19,93,49,80
+2026-03-04,Pediatrics,71,21,95,47,82
+2026-03-04,General Medicine,75,24,93,51,76
+2026-03-05,Cardiology,83,26,96,53,78
+2026-03-05,Neurology,78,22,95,58,75
+2026-03-05,Orthopedics,73,20,94,50,79
+2026-03-05,Pediatrics,70,21,95,48,81
+2026-03-05,General Medicine,74,24,92,52,75
+2026-03-06,Cardiology,84,27,95,54,77
+2026-03-06,Neurology,77,23,94,57,74
+2026-03-06,Orthopedics,72,19,93,49,80
+2026-03-06,Pediatrics,71,21,95,48,82
+2026-03-06,General Medicine,74,25,93,52,76
+2026-03-07,Cardiology,85,26,96,55,78
+2026-03-07,Neurology,78,23,95,58,75
+2026-03-07,Orthopedics,73,20,94,50,80
+2026-03-07,Pediatrics,70,20,95,48,82
+2026-03-07,General Medicine,75,24,93,52,76

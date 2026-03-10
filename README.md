@@ -14,7 +14,11 @@
 - **Trend Charts:** Interactive Plotly/Recharts charts with anomaly markers and 7-day history.  
 - **Alert Panel:** Real-time alerts – **LOW / MEDIUM / HIGH** severity.  
 - **AI Insights:** Human-readable explanations with confidence scores.  
-- **Predictive Alerts:** Forecast KPIs trending toward critical levels.  
+- **Predictive Alerts:** Forecast KPIs trending toward critical levels.
+<img width="940" height="491" alt="Dashboard page" src="https://github.com/user-attachments/assets/5d8238e5-c6d8-4146-ae4a-14a2c368d703" />
+
+- <img width="937" height="482" alt="Analytics" src="https://github.com/user-attachments/assets/bc1a25b0-73bb-4223-bd14-e90275e861cb" />
+
 
 ### 🤖 Smart Queue Management (YOLO-Powered)
 - Real-time queue detection in OPD, labs, and billing counters.  
@@ -29,11 +33,19 @@
 - **Severity Levels:** LOW / MEDIUM / HIGH → ensures critical issues get immediate attention.  
 - Fully integrated with dashboard, AI insights, and predictive alerts.  
 
+
+<img width="959" height="472" alt="Alerts" src="https://github.com/user-attachments/assets/23783e2f-f594-4f11-9484-eef294d80f51" />
+
 ### 🌐 Theme & Language Toggles
 - **Theme Modes:** Light / Dark mode for comfortable viewing.  
 - **Language Modes:** English 🇬🇧, Hindi 🇮🇳, Tamil 🟪.  
 - Fully dynamic—KPI cards, AI insights, and alerts update instantly.  
 - **Accessibility:** Designed for diverse hospital staff.  
+
+<img width="935" height="455" alt="Hindi language" src="https://github.com/user-attachments/assets/3f56bee0-6e4c-4ffd-8126-8328122be6d9" />
+<img width="939" height="449" alt="Tamil language" src="https://github.com/user-attachments/assets/bcbaccb0-fdc8-411b-929d-a3ccc89c8567" />
+
+
 
 ### ⚡ n8n Workflow Integration
 - Live KPI submission forms linked to **n8n webhook**.  

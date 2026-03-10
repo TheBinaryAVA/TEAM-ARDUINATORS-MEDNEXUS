@@ -85,6 +85,33 @@
 - Hackathon-ready: visually impressive, technically deep, and scalable.  
 
 ---
+
+
+
+🤖 MedNexusChat – Conversational Hospital Analytics
+
+MedNexusChat is a conversational AI assistant that allows hospital administrators to interact with operational data using natural language.
+
+Instead of navigating multiple dashboards, users can simply ask questions such as:
+
+“Why did OPD wait times increase today?”
+
+“Which department has the highest bed occupancy?”
+
+“What KPI is most likely to breach its threshold?”
+
+The chatbot processes the query, retrieves relevant KPI data from the backend, and generates context-aware insights explaining operational trends and anomalies.
+
+By converting complex hospital analytics into simple conversational responses, MedNexusChat acts as a 24/7 virtual hospital operations analyst, enabling faster and more informed decision-making.
+
+
+
+<img width="953" height="491" alt="image" src="https://github.com/user-attachments/assets/dc7c9552-c91a-40b5-a2ad-d4f0dc41fa20" />
+<img width="954" height="448" alt="image" src="https://github.com/user-attachments/assets/57c6148d-b2c9-4685-82af-e0b5d777b8c0" />
+<img width="956" height="491" alt="image" src="https://github.com/user-attachments/assets/5d2bb989-1e21-4117-b8df-a3e9dfbe3ff9" />
+
+
+
 DEMO OF QUEUE MANAGEMENT SYSTEM:
 Input System:
 ![demo_input-ezgif com-split](https://github.com/user-attachments/assets/7adee12d-f135-4136-9282-146ae564163b)

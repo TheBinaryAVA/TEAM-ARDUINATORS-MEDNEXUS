@@ -119,5 +119,4 @@ Output System:
 <img width="900" height="600" alt="queue_output_frame" src="https://github.com/user-attachments/assets/f700e220-2b0d-4f67-98a3-0927dc371d1f" />
 
 
-### 👥 Team
-**Team Arduinators** – bringing innovation, AI, and real-time automation to hospital operations!  
+
